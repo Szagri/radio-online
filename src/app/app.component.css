@@ -36,6 +36,7 @@
 
 .parallax-asteroids {
   background-image: url('/assets/asteroidy.png');
+  z-index: 1;
 }
 
 .parallax-moon {
