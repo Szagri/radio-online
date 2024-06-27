@@ -1,0 +1,20 @@
+<div class="radio-container">
+    <div class="button-container">
+        <button #startButton class="btn btn-play" (click)="playMusic()">
+            <img *ngIf="isPlaying(); else playTemplate" src="/assets/pause.png" alt="Pause">
+            <ng-template #playTemplate>
+                <img src="/assets/play.png" alt="Play"> 
+            </ng-template>
+        </button>
+        <canvas #visualizerCanvas class="visualizer-canvas"></canvas>
+    </div>
+    <div class="volume-container">
+        <img src="/assets/volume_down.png" alt="volumeDown">
+        <input class="form-range" type="range" min="0" max="100" step="1"
+        [value]="getVolume()" 
+        (input)="volumeMusic($event)"
+        >
+        <img src="/assets/volume_up.png" alt="volumeUp">
+    </div>
+</div>
+ 
