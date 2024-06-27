@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, ViewChildren, AfterViewInit, QueryList, ElementRef,  } from '@angular/core';
+import { Component, HostListener, ViewChildren, AfterViewInit, QueryList, ElementRef, NgZone } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { RadioComponent } from './radio/radio.component';
 
@@ -17,17 +17,14 @@ export class AppComponent implements AfterViewInit{
   private imagePositions: { x: number, y: number }[] = [];
   private directions: { x: number, y: number }[] = [];
   private isBrowser: boolean = typeof window !== 'undefined';
-  private animationFrame: number | null = null;
+
+  constructor(private ngZone: NgZone) {}
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
     if (!this.isBrowser) return;
 
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-    }
-
-    this.animationFrame = requestAnimationFrame(() => {
+    this.ngZone.runOutsideAngular(() => {
       const elements = [
         { selector: '.parallax-background', factorX: 95, factorY: 95 },
         { selector: '.parallax-moon', factorX: 35, factorY: 35 },
@@ -40,10 +37,7 @@ export class AppComponent implements AfterViewInit{
         if (element) {
           const x = (window.innerWidth - event.pageX * 2) / factorX;
           const y = (window.innerHeight - event.pageY * 2) / factorY;
-          const currentTransform = getComputedStyle(element).transform.replace(/none|matrix.*\)/g, '');
-          const newTransform = `translate(${x}px, ${y}px)`;
-
-          element.style.transform = currentTransform ? `${currentTransform} ${newTransform}` : newTransform;
+          element.style.transform = `translate(${x}px, ${y}px)`;
         }
       });
     });
@@ -74,27 +68,29 @@ export class AppComponent implements AfterViewInit{
 
   private animateImages(): void {
     if (!this.isBrowser) return;
-    
+
     const images = this.movingImages?.toArray().map((img: ElementRef<HTMLImageElement>) => img.nativeElement);
     if (!images || images.length === 0) return;
 
     const animate = () => {
-      images.forEach((img, i) => {
-        this.imagePositions[i].x += this.directions[i].x;
-        this.imagePositions[i].y += this.directions[i].y;
+      this.ngZone.runOutsideAngular(() => {
+        images.forEach((img, i) => {
+          this.imagePositions[i].x += this.directions[i].x;
+          this.imagePositions[i].y += this.directions[i].y;
 
-        if (this.imagePositions[i].x > window.innerWidth) {
-          this.imagePositions[i].x = -img.width;
-        }
+          if (this.imagePositions[i].x > window.innerWidth) {
+            this.imagePositions[i].x = -img.width;
+          }
 
-        if (this.imagePositions[i].y <= 0 || this.imagePositions[i].y + img.height >= window.innerHeight) {
-          this.directions[i].y *= -1;
-        }
+          if (this.imagePositions[i].y <= 0 || this.imagePositions[i].y + img.height >= window.innerHeight) {
+            this.directions[i].y *= -1;
+          }
 
-        img.style.transform = `translate(${this.imagePositions[i].x}px, ${this.imagePositions[i].y}px)`;
+          img.style.transform = `translate(${this.imagePositions[i].x}px, ${this.imagePositions[i].y}px)`;
+        });
+
+        requestAnimationFrame(animate);
       });
-
-      requestAnimationFrame(animate);
     };
 
     animate();

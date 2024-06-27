@@ -2,10 +2,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     text-align: center;
     width: 100vw;
     height: 80vh;
     position: relative;
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
 
 .radio-container img {
@@ -17,24 +20,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top:10%;
     width: 100%;
     height: 65vh;
     position: relative;
 }
 
 .btn-play {
-    position: relative;
     border: solid 0.5rem #00CED1;
     border-radius: 50%;
     padding: 10px;
-    z-index: 1;
     width: 220px; 
-    height: 220px; 
+    height: 220px;
+    transition: border-color 0.3s; 
+    background: none;
+    cursor: pointer;
+    z-index: 1;
 }
 
 .btn-play:active {
-    border: solid 0.5rem white;
+    border: #FFFFFF;
 }
 
 .visualizer-canvas {
@@ -47,44 +51,69 @@
 }
 
 .volume-container {
-    position: relative;
     display: flex;
     align-items: center;
-    width: 50vw;
-    align-items: center;
     justify-content: center;
-    left: 50%;
-    transform: translate(-50%, 0);
+    width: 50vw;
     height: 10vh;
-    -webkit-user-select: none;
-    -ms-user-select: none; 
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
     user-select: none;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    z-index: 1;
 }
 
 .form-range {
     flex: 1;
     width: 100%;
     margin: 0 10px;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
 }
 
 .form-range img {
     max-width: 30px;
     height: auto;
     margin: 0 5px;
-    -webkit-user-select: none;
-    -ms-user-select: none; 
     user-select: none;
 }
 
 
 .form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
     width: 150px;
     height: 150px;
     background: url('/assets/orzel.png') no-repeat center center;
     background-size: cover;
     margin-top: -75px;
     cursor: pointer;
-    z-index: 2;
+    outline: none;
+    box-shadow: none;
+}
+
+.form-range::-moz-range-thumb {
+    width: 150px;
+    height: 150px;
+    background: url('/assets/orzel.png') no-repeat center center;
+    background-size: cover;
+    margin-top: -75px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+}
+
+.form-range::-ms-thumb  {
+    width: 150px;
+    height: 150px;
+    background: url('/assets/orzel.png') no-repeat center center;
+    background-size: cover;
+    margin-top: -75px;
+    cursor: pointer;
     outline: none;
     box-shadow: none;
 }
@@ -92,9 +121,26 @@
 .form-range::-webkit-slider-runnable-track {
     height: 3px;
     background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 .1rem .25rem black;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1;
+
 }
 
+@media (max-width: 768px) {
+    .btn-play {
+        width: 120px;
+        height: 120px;
+        padding: 5px;
+    }
+
+    .volume-container {
+        width: 90vw;
+        height: 8vh;
+    }
+
+    .form-range::-webkit-slider-thumb {
+        width: 75px;
+        height: 75px;
+        margin-top: -37.5px;
+    }
+}

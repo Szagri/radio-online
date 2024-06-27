@@ -11,16 +11,13 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 })
 export class RadioComponent implements OnInit {
   @ViewChild('visualizerCanvas', { static: true }) visualizerCanvas?: ElementRef<HTMLCanvasElement>;
-  @ViewChild('startButton', { static: true }) startButton?: ElementRef<HTMLButtonElement>;
 
   private audioContext?: AudioContext;
   private analyser?: AnalyserNode;
   private dataArray?: Uint8Array;
   private bufferLength?: number;
-  private canvasCtx: CanvasRenderingContext2D | null = null;
   private isBrowser: boolean;
   private audioInitialized: boolean = false;
-  private mediaElementSourceNode?: MediaElementAudioSourceNode;
 
   constructor(private audioService: AudioService, @Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -37,9 +34,7 @@ export class RadioComponent implements OnInit {
     if (this.audioService.getAudioElement() && !this.audioInitialized) {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       this.analyser = this.audioContext.createAnalyser();
-      this.mediaElementSourceNode = this.audioContext.createMediaElementSource(this.audioService.getAudioElement()!);
-      this.mediaElementSourceNode.connect(this.analyser);
-      this.analyser.connect(this.audioContext.destination);
+      this.audioContext.createMediaElementSource(this.audioService.getAudioElement()!).connect(this.analyser).connect(this.audioContext.destination);
       this.analyser.fftSize = 512;
       this.bufferLength = this.analyser.frequencyBinCount;
       this.dataArray = new Uint8Array(this.bufferLength);
@@ -74,7 +69,7 @@ export class RadioComponent implements OnInit {
 
     requestAnimationFrame(() => this.drawVisualizer());
 
-    if (!this.visualizerCanvas || !this.audioContext || !this.analyser || !this.dataArray || !this.startButton || !this.bufferLength) return;
+    if (!this.visualizerCanvas || !this.audioContext || !this.analyser || !this.dataArray || !this.bufferLength) return;
 
     this.analyser.getByteFrequencyData(this.dataArray);
 

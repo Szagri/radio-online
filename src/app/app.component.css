@@ -14,30 +14,24 @@
     width: 100%;
   }
   
-.parallax-background {
+  .parallax-background,
+  .parallax-moon,
+  .parallax-asteroids,
+  .parallax-earth {
     position: absolute;
     top: -5%;
     left: -5%;
     width: 110%;
     height: 110%;
     background-size: cover;
-    background-image: url('/assets/background_upper_layer.png');
     background-repeat: no-repeat;
     background-position: center;
     will-change: transform;
     z-index: -1;
-}
+  }
 
-.parallax-moon, .parallax-asteroids, .parallax-earth{
-  position: absolute;
-  top: -5%;
-  left: -5%;
-  width: 110%;
-  height: 110%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  will-change: transform;
+.parallax-background {
+  background-image: url('/assets/background_upper_layer.png');
 }
 
 .parallax-asteroids {
@@ -46,18 +40,11 @@
 
 .parallax-moon {
   background-image: url('/assets/background_down_layer.png');
+  z-index: 1;
 }
 
-.parallax-earth{
+.parallax-earth {
   background-image: url('/assets/ziemia.png');
-}
-
-.background-down-layer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
 }
 
 .banner {
@@ -66,33 +53,27 @@
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
   background: transparent;
   overflow: hidden;
   perspective: 1000px;
-  -webkit-user-select: none;
-  -ms-user-select: none; 
   user-select: none;
 }
 
 .banner-logo {
-  position: relative;
   max-width: 125px;
   height: auto;
-  -webkit-user-select: none;
-  -ms-user-select: none; 
-  user-select: none;
   margin: -40px;
   animation: float 5s infinite alternate;
 }
   
 .banner h1 {
   font-family: 'Press Start 2P', cursive;
-  font-size: 2rem; 
+  font-size: 2rem;
   color: #FFFFFF;
   z-index: 1;
   animation: glow 2.5s infinite alternate, scale 5s infinite alternate;
@@ -100,11 +81,10 @@
 
 .banner h3 {
   font-family: 'Press Start 2p', cursive;
-  position: relative;
-  top: 5%;
   font-size: 1rem;
   color: #FFFFFF;
   z-index: 1;
+  margin-top: 40px;
   text-shadow:
     0 0 5px #FFFFFF, 
     0 0 10px #FFFFFF, 
@@ -119,8 +99,8 @@
       0 0 30px  #00CED1,
       0 0 40px  #00CED1,
       0 0 50px  #00CED1,
-      0 0 60px #FF69B4,
-      0 0 70px #FF69B4;
+      0 0 60px  #FF69B4,
+      0 0 70px  #FF69B4;
   }
   to {
     text-shadow: 
@@ -157,13 +137,34 @@
 
 .moving-image {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
   left: 0;
   top: 0%;
   z-index: -1;
   opacity: 0.3;
-  -webkit-user-select: none;
-  -ms-user-select: none; 
   user-select: none;
+}
+
+@media (max-width: 768px) {
+  .banner-logo {
+    max-width: 80px;
+  }
+
+  .banner h1 {
+    font-size: 1.5rem;
+  }
+
+  .banner h3 {
+    font-size: 0.75rem;
+  }
+
+  .moving-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .banner {
+    height: 50vh;
+  }
 }

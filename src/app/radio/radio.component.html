@@ -1,6 +1,6 @@
 <div class="radio-container">
     <div class="button-container">
-        <button #startButton class="btn btn-play" (click)="playMusic()">
+        <button class="btn btn-play" (click)="playMusic()">
             <img *ngIf="isPlaying(); else playTemplate" src="/assets/pause.png" alt="Pause">
             <ng-template #playTemplate>
                 <img src="/assets/play.png" alt="Play"> 
